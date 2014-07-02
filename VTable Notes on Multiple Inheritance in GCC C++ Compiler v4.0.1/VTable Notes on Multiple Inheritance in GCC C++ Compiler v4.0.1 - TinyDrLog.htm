@@ -1,0 +1,915 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"></head><body onload="prettyPrint()">1000
+
+
+
+
+
+<script type="text/javascript" src="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/analytics.js"></script>
+<link type="text/css" rel="stylesheet" href="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/banner-styles.css">
+
+
+
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title> VTable Notes on Multiple Inheritance in GCC C++ Compiler v4.0.1 - TinyDrLog </title>
+
+	<!-- style START -->
+	<!-- default style -->
+    <link rel="stylesheet" href="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/style.css" type="text/css">
+	<!-- style END -->
+
+	<link href="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/prettify.htm" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/jquery-1.htm"></script>
+	<script type="text/javascript" src="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/prettify_002.htm"></script>
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/jquery_003.js"></script>
+<script type="text/javascript" src="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/jquery_002.js"></script>
+
+
+
+
+
+
+
+
+<!-- BEGIN WAYBACK TOOLBAR INSERT -->
+<script> if (window.archive_analytics) { window.archive_analytics.values['server_name']="wwwb-app19.us.archive.org";}; </script>
+
+<script type="text/javascript" src="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/disclaim-element.js"></script>
+<script type="text/javascript" src="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/graph-calc.js"></script>
+<script type="text/javascript" src="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/jquery.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+var firstDate = 820454400000;
+var lastDate = 1420070399999;
+var wbPrefix = "/web/";
+var wbCurrentUrl = "http:\/\/tinydrblog.appspot.com\/?p=89001";
+
+var curYear = -1;
+var curMonth = -1;
+var yearCount = 18;
+var firstYear = 1996;
+var imgWidth = 475;
+var yearImgWidth = 25;
+var monthImgWidth = 2;
+var trackerVal = "none";
+var displayDay = "17";
+var displayMonth = "май";
+var displayYear = "2012";
+var prettyMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+function showTrackers(val) {
+	if(val == trackerVal) {
+		return;
+	}
+	if(val == "inline") {
+		document.getElementById("displayYearEl").style.color = "#ec008c";
+		document.getElementById("displayMonthEl").style.color = "#ec008c";
+		document.getElementById("displayDayEl").style.color = "#ec008c";		
+	} else {
+		document.getElementById("displayYearEl").innerHTML = displayYear;
+		document.getElementById("displayYearEl").style.color = "#ff0";
+		document.getElementById("displayMonthEl").innerHTML = displayMonth;
+		document.getElementById("displayMonthEl").style.color = "#ff0";
+		document.getElementById("displayDayEl").innerHTML = displayDay;
+		document.getElementById("displayDayEl").style.color = "#ff0";
+	}
+   document.getElementById("wbMouseTrackYearImg").style.display = val;
+   document.getElementById("wbMouseTrackMonthImg").style.display = val;
+   trackerVal = val;
+}
+function getElementX2(obj) {
+	var thing = jQuery(obj);
+	if((thing == undefined) 
+			|| (typeof thing == "undefined") 
+			|| (typeof thing.offset == "undefined")) {
+		return getElementX(obj);
+	}
+	return Math.round(thing.offset().left);
+}
+function trackMouseMove(event,element) {
+
+   var eventX = getEventX(event);
+   var elementX = getElementX2(element);
+   var xOff = eventX - elementX;
+	if(xOff < 0) {
+		xOff = 0;
+	} else if(xOff > imgWidth) {
+		xOff = imgWidth;
+	}
+   var monthOff = xOff % yearImgWidth;
+
+   var year = Math.floor(xOff / yearImgWidth);
+	var yearStart = year * yearImgWidth;
+   var monthOfYear = Math.floor(monthOff / monthImgWidth);
+   if(monthOfYear > 11) {
+       monthOfYear = 11;
+   }
+   // 1 extra border pixel at the left edge of the year:
+   var month = (year * 12) + monthOfYear;
+   var day = 1;
+	if(monthOff % 2 == 1) {
+		day = 15;
+	}
+	var dateString = 
+		zeroPad(year + firstYear) + 
+		zeroPad(monthOfYear+1,2) +
+		zeroPad(day,2) + "000000";
+
+	var monthString = prettyMonths[monthOfYear];
+	document.getElementById("displayYearEl").innerHTML = year + 1996;
+	document.getElementById("displayMonthEl").innerHTML = monthString;
+	// looks too jarring when it changes..
+	//document.getElementById("displayDayEl").innerHTML = zeroPad(day,2);
+
+	var url = wbPrefix + dateString + '/' +  wbCurrentUrl;
+	document.getElementById('wm-graph-anchor').href = url;
+
+   //document.getElementById("wmtbURL").value="evX("+eventX+") elX("+elementX+") xO("+xOff+") y("+year+") m("+month+") monthOff("+monthOff+") DS("+dateString+") Moy("+monthOfYear+") ms("+monthString+")";
+   if(curYear != year) {
+       var yrOff = year * yearImgWidth;
+       document.getElementById("wbMouseTrackYearImg").style.left = yrOff + "px";
+       curYear = year;
+   }
+   if(curMonth != month) {
+       var mtOff = year + (month * monthImgWidth) + 1;
+       document.getElementById("wbMouseTrackMonthImg").style.left = mtOff + "px";
+       curMonth = month;
+   }
+}
+//]]>
+</script>
+
+<style type="text/css">body{margin-top:0!important;padding-top:0!important;min-width:800px!important;}#wm-ipp a:hover{text-decoration:underline!important;}</style>
+<div id="wm-ipp" class="__wb_banner_div" style="display:none; position:relative;padding:0 5px;min-height:70px;min-width:800px" lang="en">
+
+
+<div id="wm-ipp-inside" class="__wb_banner_div" style="position:fixed;padding:0!important;margin:0!important;width:97%;min-width:780px;border:5px solid #000;border-top:none;background-image:url(/static/images/toolbar/wm_tb_bk_trns.png);text-align:center;-moz-box-shadow:1px 1px 3px #333;-webkit-box-shadow:1px 1px 3px #333;box-shadow:1px 1px 3px #333;font-size:11px!important;font-family:'Lucida Grande','Arial',sans-serif!important;">
+   <table style="border-collapse:collapse;margin:0;padding:0;width:100%;"><tbody><tr>
+   <td style="padding:10px;vertical-align:top;min-width:110px;">
+   <a href="http://web.archive.org/web/" title="Wayback Machine home page" style="background-color:transparent;border:none;"><img src="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/wayback-toolbar-logo.png" alt="Wayback Machine" border="0" height="39" width="110"></a>
+   </td>
+   <td style="padding:0!important;text-align:center;vertical-align:top;width:100%;">
+
+       <table style="border-collapse:collapse;margin:0 auto;padding:0;width:570px;"><tbody><tr>
+       <td style="padding:3px 0;" colspan="2">
+       <form target="_top" method="get" action="/web/form-submit.jsp" name="wmtb" id="wmtb" style="margin:0!important;padding:0!important;"><input name="url" id="wmtbURL" value="http://tinydrblog.appspot.com/?p=89001" style="width:400px;font-size:11px;font-family:'Lucida Grande','Arial',sans-serif;" onfocus="javascript:this.focus();this.select();" type="text"><input name="type" value="replay" type="hidden"><input name="date" value="20120517021435" type="hidden"><input value="Go" style="font-size:11px;font-family:'Lucida Grande','Arial',sans-serif;margin-left:5px;width: inherit !important" type="submit"><span id="wm_tb_options" style="display:block;"></span></form>
+       </td>
+       <td style="vertical-align:bottom;padding:5px 0 0 0!important;" rowspan="2">
+           <table style="border-collapse:collapse;width:110px;color:#99a;font-family:'Helvetica','Lucida Grande','Arial',sans-serif;"><tbody>
+			
+           <!-- NEXT/PREV MONTH NAV AND MONTH INDICATOR -->
+           <tr style="width:110px;height:16px;font-size:10px!important;">
+           	<td style="padding-right:9px;font-size:11px!important;font-weight:bold;text-transform:uppercase;text-align:right;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+                       апр
+                       
+               </td>
+               <td id="displayMonthEl" style="background:#000;color:#ff0;font-size:11px!important;font-weight:bold;text-transform:uppercase;width:34px;height:15px;padding-top:1px;text-align:center;" title="You are here: 2:14:35 май 17, 2012">МАЙ</td>
+				<td style="padding-left:9px;font-size:11px!important;font-weight:bold;text-transform:uppercase;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+                       июн
+                       
+               </td>
+           </tr>
+
+           <!-- NEXT/PREV CAPTURE NAV AND DAY OF MONTH INDICATOR -->
+           <tr>
+               <td style="padding-right:9px;white-space:nowrap;overflow:visible;text-align:right!important;vertical-align:middle!important;" nowrap="nowrap">
+               
+                       <img src="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/wm_tb_prv_off.png" alt="Previous capture" border="0" height="16" width="14">
+                       
+               </td>
+               <td id="displayDayEl" style="background:#000;color:#ff0;width:34px;height:24px;padding:2px 0 0 0;text-align:center;font-size:24px;font-weight: bold;" title="You are here: 2:14:35 май 17, 2012">17</td>
+				<td style="padding-left:9px;white-space:nowrap;overflow:visible;text-align:left!important;vertical-align:middle!important;" nowrap="nowrap">
+               
+                       <img src="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/wm_tb_nxt_off.png" alt="Next capture" border="0" height="16" width="14">
+                       
+			    </td>
+           </tr>
+
+           <!-- NEXT/PREV YEAR NAV AND YEAR INDICATOR -->
+           <tr style="width:110px;height:13px;font-size:9px!important;">
+				<td style="padding-right:9px;font-size:11px!important;font-weight: bold;text-align:right;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+                       2011
+                       
+               </td>
+               <td id="displayYearEl" style="background:#000;color:#ff0;font-size:11px!important;font-weight: bold;padding-top:1px;width:34px;height:13px;text-align:center;" title="You are here: 2:14:35 май 17, 2012">2012</td>
+				<td style="padding-left:9px;font-size:11px!important;font-weight: bold;white-space:nowrap;overflow:visible;" nowrap="nowrap">
+               
+                       2013
+                       
+				</td>
+           </tr>
+           </tbody></table>
+       </td>
+
+       </tr>
+       <tr>
+       <td style="vertical-align:middle;padding:0!important;">
+           <a href="http://web.archive.org/web/20120517021435*/http://tinydrblog.appspot.com/?p=89001" style="color:#33f;font-size:11px;font-weight:bold;background-color:transparent;border:none;" title="See a list of every capture for this URL"><strong>1 captures</strong></a>
+           <div class="__wb_banner_div" style="margin:0!important;padding:0!important;color:#666;font-size:9px;padding-top:2px!important;white-space:nowrap;" title="Timespan for captures of this URL">17 май 12 - 17 май 12</div>
+       </td>
+       <td style="padding:0!important;">
+       <a style="position:relative; white-space:nowrap; width:475px;height:27px;" href="" id="wm-graph-anchor">
+       <div class="__wb_banner_div" id="wm-ipp-sparkline" style="position:relative; white-space:nowrap; width:475px;height:27px;background-color:#fff;cursor:pointer;border-right:1px solid #ccc;" title="Explore captures for this URL">
+			<img id="sparklineImgId" style="position:absolute; z-index:9012; top:0px; left:0px;" onmouseover="showTrackers('inline');" onmouseout="showTrackers('none');" onmousemove="trackMouseMove(event,this)" alt="sparklines" src="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/graph.png" border="0" height="27" width="475">
+			<img id="wbMouseTrackYearImg" style="display:none; position:absolute; z-index:9010;" src="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/transp-yellow-pixel.png" border="0" height="27" width="25">
+			<img id="wbMouseTrackMonthImg" style="display:none; position:absolute; z-index:9011; " src="VTable%20Notes%20on%20Multiple%20Inheritance%20in%20GCC%20C++%20Compiler%20v4.0.1%20-%20TinyDrLog_files/transp-red-pixel.png" border="0" height="27" width="2">
+       </div>
+		</a>
+
+       </td>
+       </tr></tbody></table>
+   </td>
+   <td style="text-align:right;padding:5px;width:65px;font-size:11px!important;">
+       <a href="javascript:;" onclick="document.getElementById('wm-ipp').style.display='none';" style="display:block;padding-right:18px;background:url(/static/images/toolbar/wm_tb_close.png) no-repeat 100% 0;color:#33f;font-family:'Lucida Grande','Arial',sans-serif;margin-bottom:23px;background-color:transparent;border:none;" title="Close the toolbar">Close</a>
+       <a href="http://faq.web.archive.org/" style="display:block;padding-right:18px;background:url(/static/images/toolbar/wm_tb_help.png) no-repeat 100% 0;color:#33f;font-family:'Lucida Grande','Arial',sans-serif;background-color:transparent;border:none;" title="Get some help using the Wayback Machine">Help</a>
+   </td>
+   </tr></tbody></table>
+
+</div>
+</div>
+<script type="text/javascript">
+ var wmDisclaimBanner = document.getElementById("wm-ipp");
+ if(wmDisclaimBanner != null) {
+   disclaimElement(wmDisclaimBanner);
+ }
+</script>
+<!-- END WAYBACK TOOLBAR INSERT -->
+
+<!-- wrap START -->
+<div id="wrap">
+
+<!-- container START -->
+<div id="container">
+
+<!-- header START -->
+<div id="header">
+
+	<!-- banner START -->
+		<!-- banner END -->
+
+	<div id="caption">
+		<h1 id="title"><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/">TinyDrLog</a></h1>
+		<div id="tagline">This is TinyDr's blog.</div>
+
+	</div>
+
+	<div class="fixed"></div>
+</div>
+<!-- header END -->
+
+<!-- navigation START -->
+<div id="navigation">
+	<!-- menus START -->
+	<ul id="menus">
+		<li class="current_page_item"><a class="home" title="首页" href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/">首页</a></li>
+
+		
+	</ul>
+	<!-- menus END -->
+
+	<!-- searchbox START -->
+	<div id="searchbox">
+
+					<form action="/web/20120517021435/http://www.google.cn/search" method="get" target="_blank">
+				<div class="content">
+					<input class="textfield" name="as_q" size="24" type="text">
+                    <input name="as_sitesearch" value="tinydrblog.appspot.com" type="hidden">
+					<input class="button" value="" type="submit">
+                    
+				</div>
+			</form>
+			</div>
+
+	<!-- searchbox END -->
+
+	<div class="fixed"></div>
+</div>
+<!-- navigation END -->
+
+
+
+
+ 
+  
+<!-- content START -->
+<div id="content">
+
+	<!-- main START -->
+	<div id="main">
+
+	<div class="post" id="post-968">
+		<h2>VTable Notes on Multiple Inheritance in GCC C++ Compiler v4.0.1</h2>
+		<div class="info">
+
+			<span class="date">十一月 21st, 2010 </span>
+													<span class="addcomment"><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=89001#respond">发表评论</a></span>
+				<span class="comments"><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=89001#comments">阅读评论</a></span>
+						<div class="fixed"></div>
+		</div>
+		<div class="content">
+			<a name="basics"><h4>[原文地址：http://www.cse.wustl.edu/~mdeters/seminar/fall2005/mi.html#basics]<br></h4><h4>The Basics: Single Inheritance</h4></a><p>As
+ we discussed in class, single inheritance leads to an object layoutwith
+ base class data laid out before derived class data.  So ifclasses A and
+ B are defined thusly:</p><blockquote><pre>class A {<br>public:<br>  int a;<br>};<br><br>class B : public A {<br>public:<br>  int b;<br>};<br></pre></blockquote><p>then objects of type B are laid out like this (where "b" is a pointerto such an object):</p><blockquote><pre>b --&gt; +-----------+<br>      |     x     |<br>      +-----------+<br>      |     y     |<br>      +-----------+<br></pre></blockquote><p>If you have <em>virtual</em> methods:</p><blockquote><pre>class A {<br>public:<br>  int a;<br>  virtual void v();<br>};<br><br>class B : public A {<br>public:<br>  int b;<br>};<br></pre></blockquote><p>then you'll have a vtable pointer as well:</p><blockquote><pre>                           +-----------------------+<br>                           |     0 (top_offset)    |<br>                           +-----------------------+<br>b --&gt; +----------+         | ptr to typeinfo for B |<br>      |  vtable  |-------&gt; +-----------------------+<br>      +----------+         |         A::v()        |<br>      |     x    |         +-----------------------+<br>      +----------+<br>      |     y    
+1000
+|<br>      +----------+<br></pre></blockquote><p>that is, <code>top_offset</code> and the <code>typeinfo</code> pointerlive <em>above</em> the location to which the vtable pointer points.</p><a name="multiple"><h4>Simple Multiple Inheritance</h4></a><p>Now consider multiple inheritance:</p><blockquote><pre>class A {<br>public:<br>  int a;<br>  virtual void v();<br>};<br><br>class B {<br>public:<br>  int b;<br>  virtual void w();<br>};<br><br>class C : public A, public B {<br>public:<br>  int c;<br>};<br></pre></blockquote><p>In this case, objects of type C are laid out like this:</p><blockquote><pre>                           +-----------------------+<br>                           |     0 (top_offset)    |<br>                           +-----------------------+<br>c --&gt; +----------+         | ptr to typeinfo for C |<br>      |  vtable  |-------&gt; +-----------------------+<br>      +----------+         |         A::v()        |<br>      |     a    |         +-----------------------+<br>      +----------+         |    -8 (top_offset)    |<br>      |  vtable  |---+     +-----------------------+<br>      +----------+   |     | ptr to typeinfo for C |<br>      |     b    |   +---&gt; +-----------------------+<br>      +----------+         |         B::w()        |<br>      |     c    |         +-----------------------+<br>      +----------+<br></pre></blockquote><p><em>...but why?</em>
+  Why two vtables in one?  Well, think about typesubstitution.  If I 
+have a pointer-to-C, I can pass it to a functionthat expects a 
+pointer-to-A or to a function that expects apointer-to-B.  If a function
+ expects a pointer-to-A and I want to passit the value of my variable <code>c</code> (of type pointer-to-C), I'malready set.  Calls to <code>A::v()</code> can be made through the(first) vtable, and the called function can access the member<code>a</code> through the pointer I pass in the same way as it canthrough <em>any</em> pointer-to-A.</p><p>However, if I pass the value of my pointer variable <code>c</code> toa function that expects a pointer-to-B, we <em>also</em>
+ need asubobject of type B in our C to refer it to.  This is why we have
+ thesecond vtable pointer.  We can pass the pointer value<code>(c&nbsp;+&nbsp;8&nbsp;bytes)</code> to the function that expectsa pointer-to-B, and it's all set: it can make calls to<code>B::w()</code> through the (second) vtable pointer, and accessthe member <code>b</code> through the pointer we pass in the same wayas it can through any pointer-to-B.</p><p>Note that this "pointer-correction" needs to occur for called methodstoo.  Class C inherits <code>B::w()</code> in this case.  When<code>w()</code> is called on through a pointer-to-C, the pointer(which becomes the <strong>this</strong> pointer inside of <code>w()</code> needsto be adjusted.  This is often called <em>this pointer adjustment</em>.</p><p>In some cases, the compiler will generate a <em>thunk</em> to fix up theaddress.  Consider the same code as above but this time C overrides B'smember function <code>w()</code>:</p><blockquote><pre>class A {<br>public:<br>  int a;<br>  virtual void v();<br>};<br><br>class B {<br>public:<br>  int b;<br>  virtual void w();<br>};<br><br>class C : public A, public B {<br>public:<br>  int c;<br>  void w();<br>};<br></pre></blockquote><p>C's object layout and vtable now look like this:</p><blockquote><pre>                           +-----------------------+<br>                           |     0 (top_offset)    |<br>                           +-----------------------+<br>c --&gt; +----------+         | ptr to typeinfo for C |<br>      |  vtable  |-------&gt; +-----------------------+<br>      +----------+         |         A::v()        |<br>      |     a    |         +-----------------------+<br>      +----------+         |         C::w()        |<br>      |  vtable  |---+     +-----------------------+<br>      +----------+   |     |    -8 (top_offset)    |<br>      |     b    |   |     +----------
+1000
+-------------+<br>      +----------+   |     | ptr to typeinfo for C |<br>      |     c    |   +---&gt; +-----------------------+<br>      +----------+         |    thunk to C::w()    |<br>                           +-----------------------+<br></pre></blockquote><p>Now, when <code>w()</code>
+ is called on an instance of C through apointer-to-B, the thunk is 
+called.  What does the thunk do?  Let'sdisassemble it (here, with gdb):</p><blockquote><pre>0x0804860c &lt;_ZThn8_N1C1wEv+0&gt;:  addl   $0xfffffff8,0x4(%esp)<br>0x08048611 &lt;_ZThn8_N1C1wEv+5&gt;:  jmp    0x804853c &lt;_ZN1C1wEv&gt;<br></pre></blockquote><p>So it merely adjusts the <strong>this</strong> pointer and jumps to<code>C::w()</code>.  All is well.</p><p>But doesn't the above mean that B's vtable always points to this<code>C::w()</code> thunk?  I mean, if we have a pointer-to-B that islegitimately a B (not a C), we don't want to invoke the thunk, right?</p><p>Right.  The above embedded vtable for B in C is special to the B-in-C case.B's regular vtable is normal and points to <code>B::w()</code> directly.</p><a name="mbase"><h4>The Diamond: Multiple Copies of Base Classes (non-virtual inheritance)</h4></a><p>Okay.
+  Now to tackle the really hard stuff.  Recall the usual problem 
+ofmultiple copies of base classes when forming an inheritance diamond:</p><blockquote><pre>class A {<br>public:<br>  int a;<br>  virtual void v();<br>};<br><br>class B : public A {<br>public:<br>  int b;<br>  virtual void w();<br>};<br><br>class C : public A {<br>public:<br>  int c;<br>  virtual void x();<br>};<br><br>class D : public B, public C {<br>public:<br>  int d;<br>  virtual void y();<br>};<br></pre></blockquote><p>Note that D inherits from both B and C, and B and C both inherit from A.This means that D has <em>two</em> copies of A in it.  The object layoutand vtable embedding is what we would expect from the previous sections:</p><blockquote><pre>                           +-----------------------+<br>                           |     0 (top_offset)    |<br>                           +-----------------------+<br>d --&gt; +----------+         | ptr to typeinfo for D |<br>      |  vtable  |-------&gt; +-----------------------+<br>      +----------+         |         A::v()        |<br>      |     a    |         +-----------------------+<br>      +----------+         |         B::w()        |<br>      |     b    |         +-----------------------+<br>      +----------+         |         D::y()        |<br>      |  vtable  |---+     +-----------------------+<br>      +----------+   |     |   -12 (top_offset)    |<br>      |     a    |   |     +-----------------------+<br>      +----------+   |     | ptr to typeinfo for D |<br>      |     c    |   +---&gt; +-----------------------+<br>      +----------+         |         A::v()        |<br>      |     d    |         +-----------------------+<br>      +----------+         |         C::x()        |<br>                           +-----------------------+<br></pre></blockquote><p>Of course, we expect A's data (the member <code>a</code>)
+ to exist twicein D's object layout (and it is), and we expect A's 
+virtual member functionsto be represented twice in the vtable (and <code>A::v()</code> is indeedthere).  Okay, nothing new here.</p><a name="virtual"><h4>The Diamond: Single Copies of Virtual Bases</h4></a><p>But what if we apply <em>virtual</em>
+ inheritance?  C++ virtual inheritanceallows us to specify a diamond 
+hierarchy but be guaranteed only one copyof virtually inherited bases.  
+So let's write our code this way:</p><blockquote><pre>class A {<br>public:<br>  int a;<br>  virtual void v();<br>};<br><br>class B : public virtual A {<br>public:<br>  int b;<br>  virtual void w();<br>};<br><br>class C : public virtual A {<br>public:<br>  int c;<br>  virtual void x();<br>};<br><br>class D : public B, public C {<br>public:<br>  int d;<br>  virtual void y();<br>};<br></pre></blockquote><p>All of a sudde
+1000
+n things get a <em>lot</em> more complicated.  If we can onlyhave <em>one</em>
+ copy of A in our representation of D, then we can nolonger get away 
+with our "trick" of embedding a C in a D (and embeddinga vtable for the C
+ part of D in D's vtable).  But how can we handle theusual type 
+substitution if we can't do this?</p><p>Let's try to diagram the layout:</p><blockquote><pre>                                   +-----------------------+<br>                                   |   20 (vbase_offset)   |<br>                                   +-----------------------+<br>                                   |     0 (top_offset)    |<br>                                   +-----------------------+<br>                                   | ptr to typeinfo for D |<br>                      +----------&gt; +-----------------------+<br>d --&gt; +----------+    |            |         B::w()        |<br>      |  vtable  |----+            +-----------------------+<br>      +----------+                 |         D::y()        |<br>      |     b    |                 +-----------------------+<br>      +----------+                 |   12 (vbase_offset)   |<br>      |  vtable  |---------+       +-----------------------+<br>      +----------+         |       |    -8 (top_offset)    |<br>      |     c    |         |       +-----------------------+<br>      +----------+         |       | ptr to typeinfo for D |<br>      |     d    |         +-----&gt; +-----------------------+<br>      +----------+                 |         C::x()        |<br>      |  vtable  |----+            +-----------------------+<br>      +----------+    |            |    0 (vbase_offset)   |<br>      |     a    |    |            +-----------------------+<br>      +----------+    |            |   -20 (top_offset)    |<br>                      |            +-----------------------+<br>                      |            | ptr to typeinfo for D |<br>                      +----------&gt; +-----------------------+<br>                                   |         A::v()        |<br>                                   +-----------------------+<br></pre></blockquote><p>Okay.
+  So you see that A is now embedded in D in essentially thesame way that
+ other bases are.  But it's embedded in D rather than inits 
+directly-derived classes.</p><a name="ctor"><h4>Construction/Destruction in the Presence of Multiple Inheritance</h4></a><p>How
+ is the above object constructed in memory when the object itself 
+isconstructed?  And how do we ensure that a partially-constructed 
+object(and its vtable) are safe for constructors to operate on?</p><p>Fortunately, it's all handled very carefully for us.  Say we're constructinga new object of type D (through, for example, <code>new&nbsp;D</code>).First,
+ the memory for the object is allocated in the heap and a 
+pointerreturned.  D's constructor is invoked, but before doing any 
+D-specificconstruction it call's A's constructor on the object (after 
+adjusting the<strong>this</strong> pointer, of course!).  A's constructor fills in the A partof the D object as if it were an instance of A.</p><blockquote><pre>d --&gt; +----------+<br>      |          |<br>      +----------+<br>      |          |<br>      +----------+<br>      |          |<br>      +----------+<br>      |          |       +-----------------------+<br>      +----------+       |     0 (top_offset)    |<br>      |          |       +-----------------------+<br>      +----------+       | ptr to typeinfo for A |<br>      |  vtable  |-----&gt; +-----------------------+<br>      +----------+       |         A::v()        |<br>      |    a     |       +-----------------------+<br>      +----------+<br></pre></blockquote><p>Control
+ is returned to D's constructor, which invokes B's constructor.(Pointer 
+adjustment isn't needed here.)  When B's constructor is done,the object 
+looks like this:</p><blockquote><pre>                                             B-in-D<br>                          +-----------------------+<br>              
+1000
+            |   20 (vbase_offset)   |<br>                          +-----------------------+<br>                          |     0 (top_offset)    |<br>                          +-----------------------+<br>d --&gt; +----------+        | ptr to typeinfo for B |<br>      |  vtable  |------&gt; +-----------------------+<br>      +----------+        |         B::w()        |<br>      |    b     |        +-----------------------+<br>      +----------+        |    0 (vbase_offset)   |<br>      |          |        +-----------------------+<br>      +----------+        |   -20 (top_offset)    |<br>      |          |        +-----------------------+<br>      +----------+        | ptr to typeinfo for B |<br>      |          |   +--&gt; +-----------------------+<br>      +----------+   |    |         A::v()        |<br>      |  vtable  |---+    +-----------------------+<br>      +----------+<br>      |    a     |<br>      +----------+<br></pre></blockquote><p><em>But wait... B's constructor modified the A part of the object by changingit's vtable pointer!</em>  How did it know to distinguish this kind of B-in-Dfrom a B-in-something-else (or a standalone B for that matter)?  Simple.The <em>virtual table&nbsp;table</em>
+ told it to do this.  This structure,abbreviated VTT, is a table of 
+vtables used in construction.  In our case,the VTT for D looks like 
+this:</p><blockquote><pre>                                                                  B-in-D<br>                                               +-----------------------+<br>                                               |   20 (vbase_offset)   |<br>            VTT for D                          +-----------------------+<br>+-------------------+                          |     0 (top_offset)    |<br>|    vtable for D   |-------------+            +-----------------------+<br>+-------------------+             |            | ptr to typeinfo for B |<br>| vtable for B-in-D |-------------|----------&gt; +-----------------------+<br>+-------------------+             |            |         B::w()        |<br>| vtable for B-in-D |-------------|--------+   +-----------------------+<br>+-------------------+             |        |   |    0 (vbase_offset)   |<br>| vtable for C-in-D |-------------|-----+  |   +-----------------------+<br>+-------------------+             |     |  |   |   -20 (top_offset)    |<br>| vtable for C-in-D |-------------|--+  |  |   +-----------------------+<br>+-------------------+             |  |  |  |   | ptr to typeinfo for B |<br>|    vtable for D   |----------+  |  |  |  +-&gt; +-----------------------+<br>+-------------------+          |  |  |  |      |         A::v()        |<br>|    vtable for D   |-------+  |  |  |  |      +-----------------------+<br>+-------------------+       |  |  |  |  |<br>                            |  |  |  |  |                         C-in-D<br>                            |  |  |  |  |      +-----------------------+<br>                            |  |  |  |  |      |   12 (vbase_offset)   |<br>                            |  |  |  |  |      +-----------------------+<br>                            |  |  |  |  |      |     0 (top_offset)    |<br>                            |  |  |  |  |      +-----------------------+<br>                            |  |  |  |  |      | ptr to typeinfo for C |<br>                            |  |  |  |  +----&gt; +-----------------------+<br>                            |  |  |  |         |         C::x()        |<br>                            |  |  |  |         +-----------------------+<br>                            |  |  |  |         |    0 (vbase_offset)   |<br>                            |  |  |  |         +-----------------------+<br>                            |  |  |  |         |   -12 (top_offset)    |<br>                            |  |  |  |         +-----------------------+<br>                            |  |  |  |         | ptr to typeinfo for C |<br>                            |  |  |  +--
+1000
+-----&gt; +-----------------------+<br>                            |  |  |            |         A::v()        |<br>                            |  |  |            +-----------------------+<br>                            |  |  |<br>                            |  |  |                                    D<br>                            |  |  |            +-----------------------+<br>                            |  |  |            |   20 (vbase_offset)   |<br>                            |  |  |            +-----------------------+<br>                            |  |  |            |     0 (top_offset)    |<br>                            |  |  |            +-----------------------+<br>                            |  |  |            | ptr to typeinfo for D |<br>                            |  |  +----------&gt; +-----------------------+<br>                            |  |               |         B::w()        |<br>                            |  |               +-----------------------+<br>                            |  |               |         D::y()        |<br>                            |  |               +-----------------------+<br>                            |  |               |   12 (vbase_offset)   |<br>                            |  |               +-----------------------+<br>                            |  |               |    -8 (top_offset)    |<br>                            |  |               +-----------------------+<br>                            |  |               | ptr to typeinfo for D |<br>                            +----------------&gt; +-----------------------+<br>                               |               |         C::x()        |<br>                               |               +-----------------------+<br>                               |               |    0 (vbase_offset)   |<br>                               |               +-----------------------+<br>                               |               |   -20 (top_offset)    |<br>                               |               +-----------------------+<br>                               |               | ptr to typeinfo for D |<br>                               +-------------&gt; +-----------------------+<br>                                               |         A::v()        |<br>                                               +-----------------------+<br></pre></blockquote><p>D's
+ constructor passes a pointer into D's VTT to B's constructor (in 
+thiscase, it passes in the address of the first B-in-D entry).  And, 
+indeed,the vtable that was used for the object layout above is a special
+ vtableused just for the construction of B-in-D.</p><p>Control is 
+returned to the D constructor, and it calls the C constructor(with a VTT
+ address parameter pointing to the "C-in-D+12" entry).  WhenC's 
+constructor is done with the object it looks like this:</p><blockquote><pre>                                                                           B-in-D<br>                                                        +-----------------------+<br>                                                        |   20 (vbase_offset)   |<br>                                                        +-----------------------+<br>                                                        |     0 (top_offset)    |<br>                                                        +-----------------------+<br>                                                        | ptr to typeinfo for B |<br>                    +---------------------------------&gt; +-----------------------+<br>                    |                                   |         B::w()        |<br>                    |                                   +-----------------------+<br>                    |                          C-in-D   |    0 (vbase_offset)   |<br>                    |       +-----------------------+   +-----------------------+<br>d --&gt; +----------+  |       |   12 (vbase_offset)   |   |   -20 (top_offset)    |<br>      |  vtable  |
+1000
+--+       +-----------------------+   +-----------------------+<br>      +----------+          |     0 (top_offset)    |   | ptr to typeinfo for B |<br>      |    b     |          +-----------------------+   +-----------------------+<br>      +----------+          | ptr to typeinfo for C |   |         A::v()        |<br>      |  vtable  |--------&gt; +-----------------------+   +-----------------------+<br>      +----------+          |         C::x()        |<br>      |    c     |          +-----------------------+<br>      +----------+          |    0 (vbase_offset)   |<br>      |          |          +-----------------------+<br>      +----------+          |   -12 (top_offset)    |<br>      |  vtable  |--+       +-----------------------+<br>      +----------+  |       | ptr to typeinfo for C |<br>      |    a     |  +-----&gt; +-----------------------+<br>      +----------+          |         A::v()        |<br>                            +-----------------------+<br></pre></blockquote><p>As
+ you see, C's constructor again modified the embedded A's vtable 
+pointer.The embedded C and A objects are now using the special 
+construction C-in-Dvtable, and the embedded B object is using the 
+special construction B-in-Dvtable.  Finally, D's constructor finishes 
+the job and we end up with thesame diagram as before:</p><blockquote><pre>                                   +-----------------------+<br>                                   |   20 (vbase_offset)   |<br>                                   +-----------------------+<br>                                   |     0 (top_offset)    |<br>                                   +-----------------------+<br>                                   | ptr to typeinfo for D |<br>                      +----------&gt; +-----------------------+<br>d --&gt; +----------+    |            |         B::w()        |<br>      |  vtable  |----+            +-----------------------+<br>      +----------+                 |         D::y()        |<br>      |     b    |                 +-----------------------+<br>      +----------+                 |   12 (vbase_offset)   |<br>      |  vtable  |---------+       +-----------------------+<br>      +----------+         |       |    -8 (top_offset)    |<br>      |     c    |         |       +-----------------------+<br>      +----------+         |       | ptr to typeinfo for D |<br>      |     d    |         +-----&gt; +-----------------------+<br>      +----------+                 |         C::x()        |<br>      |  vtable  |----+            +-----------------------+<br>      +----------+    |            |    0 (vbase_offset)   |<br>      |     a    |    |            +-----------------------+<br>      +----------+    |            |   -20 (top_offset)    |<br>                      |            +-----------------------+<br>                      |            | ptr to typeinfo for D |<br>                      +----------&gt; +-----------------------+<br>                                   |         A::v()        |<br>                                   +-----------------------+<br></pre></blockquote><p>Destruction
+ occurs in the same fashion but in reverse.  D's destructoris invoked.  
+After the user's destruction code runs, the destructorcalls C's 
+destructor and directs it to use the relevant portion of D'sVTT.  C's 
+destructor manipulates the vtable pointers in the same wayit did during 
+construction; that is, the relevant vtable pointers nowpoint into the 
+C-in-D construction vtable.  Then it runs the user'sdestruction code for
+ C and returns control to D's destructor, whichnext invokes B's 
+destructor with a reference into D's VTT.  B'sdestructor sets up the 
+relevant portions of the object to refer intothe B-in-D construction 
+vtable.  It runs the user's destruction codefor B and returns control to
+ D's destructor, which finally invokes A'sdestructor.  A's destructor 
+changes the vtable for the A portion ofthe object to refer into the 
+vtable for A.  Finally, control returnsto D's destructor and d
+1000
+estruction of the object is complete.  Thememory once used by the object
+ is returned to the system.</p><p>Now, in fact, the story is somewhat 
+more complicated.  Have you everseen those "in-charge" and 
+"not-in-charge" constructor and destructorspecifications in GCC-produced
+ warning and error messages or inGCC-produced binaries?  Well, the fact 
+is that there can be twoconstructor implementations and up to three 
+destructor implementations.</p><p>An "in-charge" (or <em>complete object</em>) constructor is one thatconstructs virtual bases, and a "not-in-charge" (or <em>baseobject</em>)
+ constructor is one that does not.  Consider our aboveexample.  If a B 
+is constructed, its constructor needs to call A'sconstructor to 
+construct it.  Similarly, C's constructor needs toconstruct A.  However,
+ if B and C are constructed as part of aconstruction of a D, their 
+constructors <em>should not</em> constructA, because A is a virtual base
+ and D's constructor will take care ofconstructing it exactly once for 
+the instance of D.  Consider thecases:</p><ul><li>If you do a <code>new&nbsp;A</code>, A's "in-charge" constructor isinvoked to construct A.</li><li>When you do a <code>new&nbsp;B</code>, B's "in-charge" constructor isinvoked.  It will call the "not-in-charge" constructor for A.</li><li><code>new&nbsp;C</code> is similar to <code>new&nbsp;B</code>.</li><li>A <code>new&nbsp;D</code>
+ invokes D's "in-charge" constructor.  Wewalked through this example.  
+D's "in-charge" constructor calls the"not-in-charge" versions of A's, 
+B's, and C's constructors (in thatorder).</li></ul><p>An "in-charge" 
+destructor is the analogue of an "in-charge"constructor---it takes 
+charge of destructing virtual bases.  Similarly,a "not-in-charge" 
+destructor is generated.  But there's a third one aswell.  An "in-charge
+ deleting" destructor is one that <em>deallocates</em>the storage as well as destructing the object.  So when is one called in preferenceto the other?</p><p>Well,
+ there are two kinds of objects that can be destructed---those allocated
+ on thestack, and those allocated in the heap.  Consider this code 
+(given our diamond hierarchywith virtual-inheritance from before):</p><blockquote><pre>D d;            // allocates a D on the stack and constructs it<br>D *pd = new D;  // allocates a D in the heap and constructs it<br>/* ... */<br>delete pd;      // calls "in-charge deleting" destructor for D<br>return;         // calls "in-charge" destructor for stack-allocated D<br></pre></blockquote><p>We
+ see that the actual delete operator isn't invoked by the code doingthe 
+delete, but rather by the in-charge deleting destructor for theobject 
+being deleted.  Why do it this way?  Why not have the callercall the 
+in-charge destructor, then delete the object?  Then you'd haveonly two 
+copies of destructor implementations instead of three...</p><p>Well, the compiler <em>could</em>
+ do such a thing, but it would be morecomplicated for other reasons.  
+Consider this code (assuming a virtual destructor,which you always use, 
+right?...<em>right?!?</em>):</p><blockquote><pre>D *pd = new D;  // allocates a D in the heap and constructs it<br>C *pc = d;      // we have a pointer-to-C that points to our heap-allocated D<br>/* ... */<br>delete pc;      // call destructor thunk through vtable, but what about delete?<br></pre></blockquote><p>If
+ you didn't have an "in-charge deleting" variety of D's destructor, 
+thenthe delete operation would need to adjust the pointer just like the 
+destructorthunk does.  Remember, the C object is embedded in a D, and so
+ ourpointer-to-C above is adjusted to point into the middle of our D 
+object.We can't just delete this pointer, since it isn't the pointer 
+that wasreturned by <code>malloc()</code> when we constructed it.</p><p>So,
+ if we didn't have an in-charge deleting destructor, we'd have to 
+havethunks to the delete operator (and represent them in our vtables), 
+or somethingelse similar.</p><a name="thunks"><h4>Thunks, Virtual and Non-Virtual</h4></a><p>This section not written yet.</p><a name="oneside"><h4>Multiple Inheritance with Virtua
+1000
+l Methods on One Side</h4></a><p>Okay.  One last exercise.  What if we 
+have a diamond inheritance hierarchywith virtual inheritance, as before,
+ but only have virtual methods along oneside of it?  So:</p><blockquote><pre>class A {<br>public:<br>  int a;<br>};<br><br>class B : public virtual A {<br>public:<br>  int b;<br>  virtual void w();<br>};<br><br>class C : public virtual A {<br>public:<br>  int c;<br>};<br><br>class D : public B, public C {<br>public:<br>  int d;<br>  virtual void y();<br>};<br></pre></blockquote><p>In this case the object layout is the following:</p><blockquote><pre>                                   +-----------------------+<br>                                   |   20 (vbase_offset)   |<br>                                   +-----------------------+<br>                                   |     0 (top_offset)    |<br>                                   +-----------------------+<br>                                   | ptr to typeinfo for D |<br>                      +----------&gt; +-----------------------+<br>d --&gt; +----------+    |            |         B::w()        |<br>      |  vtable  |----+            +-----------------------+<br>      +----------+                 |         D::y()        |<br>      |     b    |                 +-----------------------+<br>      +----------+                 |   12 (vbase_offset)   |<br>      |  vtable  |---------+       +-----------------------+<br>      +----------+         |       |    -8 (top_offset)    |<br>      |     c    |         |       +-----------------------+<br>      +----------+         |       | ptr to typeinfo for D |<br>      |     d    |         +-----&gt; +-----------------------+<br>      +----------+<br>      |     a    |<br>      +----------+<br></pre></blockquote><p>So you can see the C subobject, which has no virtual methods, still has avtable (albeit empty).  Indeed, <em>all</em> instances of C have an emptyvtable.</p>
+			<div class="fixed"></div>
+		</div>
+		<div class="under">
+			<span class="categories">分类: </span><span>
+             <a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/category/Program">程序设计</a> 
+            </span>	
+            
+            <span class="tags">标签: </span><span>
+            
+            <a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/tag/"></a>&nbsp;</span>
+            
+            </div>
+
+	</div>
+
+	<!-- related posts START -->
+	<div id="related_posts"><h3>相关文章</h3>
+    <ul class="related_post">
+    
+                  <li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=114001">protel各层的含义</a></li>
+    
+                  <li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=113001">PCB板材结构介绍</a></li>
+    
+                  <li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=112001">PCB设计规范</a></li>
+    
+                  <li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=111001">PCB的阻抗控制与前端仿真（SI9000的应用）</a></li>
+    
+                  <li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=109001">怎样练习一万小时</a></li>
+    
+    </ul></div><div class="fixed"></div>	<!-- related posts END -->
+
+<div id="comments">
+
+<div id="cmtswitcher">
+			<a id="commenttab" class="curtab">评论 (0)</a>
+			<a id="readtab" class="curtab">阅读 (217)</a>
+				<span class="addcomment"><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=89001#respond">发表评论</a></span>
+
+		<div class="fixed"></div>
+</div>
+
+	﻿<div id="commentlist">
+	<!-- comments START -->
+	<ol id="thecomments">
+		
+	</ol>
+	<!-- comments END -->
+</div>
+
+<a name="commentarea"></a> <!--回复使用的锚-->
+
+<form action="/web/20120517021435/http://tinydrblog.appspot.com/post_comment" method="post" id="commentform">
+	<div id="respond">
+		<div id="author_info">
+			<div class="row">
+				<input name="author" id="author" class="textfield" size="24" tabindex="1" type="text">
+				<label for="author" class="small">昵称 (必填)</label>
+			</div>
+			<div class="row">
+				<input name="email" id="email" class="textfield" size="24" tabindex="2" type="text">
+				<label for="email" class="small">电子邮箱 (我们会为您保密) (必填)</label>
+
+			</div>
+			<div class="row">
+				<input name="url" id="url" class="textfield" size="" 1000="24" tabindex="3" type="text">
+				<label for="url" class="small">网址</label>
+			</div>
+			<div class="row">
+				<input name="checknum" id="checknum" value="9+5" type="hidden">
+
+				<input name="checkret" id="checkret" class="textfield" size="24" tabindex="4" type="text">
+				<label for="url" class="small"><span id="disp_check">9+5麻烦，计算一下</span></label>
+			</div>
+		</div>
+
+		<div class="row">
+			<textarea name="comment" id="comment" style="width:96%" rows="10" tabindex="5"></textarea>
+		</div>
+
+
+		<div id="s_msg" style="display:none;color:red">正在提交留言...</div>
+		<div class="submitbutton">
+			<input name="submit" id="submit" class="button" tabindex="6" value="提交评论" type="submit">
+		</div>
+		<input name="key" value="agp0aW55ZHJibG9ncg0LEgVFbnRyeRiptwUM" type="hidden">
+		<input name="useajax" value="0" type="hidden">
+	</div>
+</form>
+
+<script>
+	loadjs=false;
+
+	commentuser=$.cookie('comment_user');
+	if (commentuser)
+	{
+		[user,email,url]=commentuser.split('#@#');
+		$('#author').val(user);
+		$('#email').val(email);
+		$('#url').val(url);
+		$('#checkarea').hide();
+	}
+	else
+	{
+		num1=Math.round(Math.random()*10);
+		num2=Math.round(Math.random()*10);
+		$('#checkarea #checknum').val(num1+'+'+num2);
+		$('#checkarea #disp_check').text(num1+'+'+num2+'=');
+		$('#checkarea').show();
+	}
+
+	function showinfo(msg)
+	{
+		alert(msg);
+	}
+	//回复自动输入姓名函数
+	function backcomment(msg){
+		backdb=document.getElementById('comment');
+		backdb.value="@"+msg;
+		return true;
+	}
+	//引用调用函数
+	function quote(name,id){
+		var quoteMsg=document.getElementById(id).innerHTML;
+		document.getElementById("comment").value='引用'+name+'<blockquote>'+quoteMsg+'</blockquote>';
+		return true;
+	}
+	function add_comment(msg)
+	{
+		comment=$(msg)
+		if (!loadjs)
+		{
+			$("#thecomments").append(comment).show();
+			$.getScript("/static/js/jquery.color.js", function(){
+				comment.animate( { backgroundColor: '#fbc7c7' }, "slow")
+				.animate( { backgroundColor: 'white' }, "slow")
+				loadjs=true;
+			});
+		}else
+		{
+			$("#thecomments").append(comment);
+			comment.animate( { backgroundColor: '#fbc7c7' }, "slow")
+			.animate( { backgroundColor: 'white' }, "slow")
+
+		}
+	}
+
+	$('#commentform').ajaxForm({
+		type:'post',
+		dataType:  'json',
+		beforeSubmit:function(formData,jqForm,options){
+			var form = jqForm[0];
+			if (form.author)
+			{
+
+				if (!form.author.value)
+				{
+					showinfo('请输入你的名字!');
+					form.author.focus();
+					return false;
+				}
+				if (!form.email.value)
+				{
+					showinfo('请输入邮件地址');
+					form.email.focus();
+					return false;
+				}
+			}
+			if ($('#checkarea').css('display')!='none')
+			{
+				if(eval(form.checknum.value)!=form.checkret.value)
+				{
+					alert('计算错误，这个算术好像在幼儿园学过的吧？');
+					form.checkret.value='';
+					form.checkret.focus();
+					return false;
+				}
+
+			}
+
+			if (!form.comment.value)
+			{
+				showinfo('请输入留言内容');
+				form.comment.focus();
+				return false;
+			}
+
+			$('#s_msg').text('正在提交留言...').show();
+
+			return true;
+
+		},
+		success:function(data){
+			if (data[0])
+			{
+				/*document.cookie=data[2];*/
+				add_comment(data[1]);
+				$('#s_msg').text('留言提交成功！');
+				$('#comment').val('');
+			}
+			else
+			{  if (data[1]==-102)
+				showinfo('计算错误，回幼儿园进修一下再来过。');
+				$('#s_msg').text('留言提交失败！');
+				$('#checkret').focus();
+
+			}
+		}
+	});
+</script>
+
+
+
+
+</div>
+
+	<div id="postnavi">
+    
+		<span class="prev"><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=88001">笑一笑～</a></span>
+    
+    
+		<span class="next"><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=90001">装纯也要有个度好不好……</a></span>
+    
+		<div class="fixed"></div>
+	</div>
+
+	</div>
+	<!-- main END -->
+
+	
+<!-- sidebar START -->
+<div id="sidebar">
+
+<!-- sidebar north START -->
+<div id="northsidebar" class="sidebar">
+	<!-- feeds -->
+	<div class="
+1000
+widget widget_feeds">
+		<div class="content">
+			<div id="subscribe">
+				<a rel="external nofollow" id="feedrss" title="订阅这个博客的文章" href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/feed"><abbr title="Really Simple Syndication">RSS</abbr> 订阅</a>
+				<a rel="external nofollow" id="feedrss" title="订阅这个博客的评论" href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/feed/comments"><abbr title="Really Simple Syndication">RSS</abbr> 订阅评论</a>
+			</div>
+			<div class="fixed"></div>
+		</div>
+	</div>
+
+	<!-- showcase -->
+	
+	<div id="blog-notice" class="widget widget_blog_notice">		
+    <h3>博客公告</h3>
+    <ul>
+		
+	</ul>
+	</div>
+	
+	<div id="recent-posts-2" class="widget widget_recent_entries">		
+    <h3>最近文章</h3>
+    <ul>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=114001" title="protel各层的含义">protel各层的含义(85)</a></li>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=113001" title="PCB板材结构介绍">PCB板材结构介绍(25)</a></li>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=108002" title="去耦电容的容值计算和布局布线">去耦电容的容值计算和布局布线(72)</a></li>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=112001" title="PCB设计规范">PCB设计规范(52)</a></li>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=111001" title="PCB的阻抗控制与前端仿真（SI9000的应用）">PCB的阻抗控制与前端仿真（SI9000的应用）(88)</a></li>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=109001" title="怎样练习一万小时">怎样练习一万小时(22)</a></li>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=104001" title="贴片元件封装的焊盘尺寸">贴片元件封装的焊盘尺寸(140)</a></li>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=102001" title="C#结构体和字节数组的转换">C#结构体和字节数组的转换(101)</a></li>
+        
+	</ul>
+	</div>
+
+	<div id="hot-posts" class="widget widget_hot_entries">		
+    <h3>热门文章</h3>
+    <ul>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=41001" title="mini2440下释放被linux作为终端输出使用的串口ttySAC0">mini2440下释放被linux作为终端输出使用的串口ttySAC0(398)</a></li>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=93001" title="Dundas系列控件下载地址">Dundas系列控件下载地址(392)</a></li>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=48001" title="C# Winform程序多语言国际化实现的简单方法">C# Winform程序多语言国际化实现的简单方法(309)</a></li>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=31001" title="C# 串口操作系列(2) -- 入门篇，为什么我的串口程序在关闭串口时候会死锁 ？">C# 串口操作系列(2) -- 入门篇，为什么我的串口程序在关闭串口时候会死锁 ？(247)</a></li>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=33001" title="c# 结构体与字节数组间的转换技巧">c# 结构体与字节数组间的转换技巧(224)</a></li>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=42001" title="C#深度拷贝(Deep Copy)">C#深度拷贝(Deep Copy)(217)</a></li>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=89001" title="VTable Notes on Multiple Inheritance in GCC C++ Compiler v4.0.1">VTable Notes on Multiple Inheritance in GCC C++ Compiler v4.0.1(217)</a></li>
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=38001" title="用 Subversion 跟 Google Code 作版本控制">用 Subversion 跟 Google Code 作版本控制(198)</a></li>
+        
+	</ul>
+	</div>
+
+	<div id="recentcomments" class="widget widget_recentcomments">
+    <h3>最新评论</h3>
+    <ul>
+    
+    </ul>
+    </div>
+</div>
+<!-- sidebar north END -->
+
+<div id="centersidebar">
+
+	<!-- sidebar east START -->
+	<div id="eastsidebar" class="sidebar">
+    	<div id="categories-368151121" class="widget widget_categories">
+        <h3>分类目录</h3>
+        <ul>
+         	
+            <li class="cat-item cat-item-846"><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/category/culture">文化</a>(12)</li>
+            
+            <li class="cat-item cat-item-846"><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/category/Program">程序设计</a>(36)</li>
+            
+            <li class="cat-item cat-item-846"><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/category/Records">档案</a>(14)</li>
+            
+            <li class="cat-item cat-item-846"><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/category/Humor">幽默</a>(7)</li>
+            
+          
+d8b
+  <li class="cat-item cat-item-846"><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/category/circuits">电路</a>(6)</li>
+            
+    	</ul>
+        </div>	
+    </div>
+
+	<!-- sidebar east END -->
+
+	<!-- sidebar west START -->
+	<div id="westsidebar" class="sidebar">
+    	<div id="archives-2" class="widget widget_archives">
+		
+		<h3>归档</h3>
+		<ul>
+		
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/2011/01">January 2011(6)</a></li>
+		
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/2010/12">December 2010(12)</a></li>
+		
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/2010/11">November 2010(7)</a></li>
+		
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/2010/10">October 2010(4)</a></li>
+		
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/2010/09">September 2010(4)</a></li>
+		
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/2010/08">August 2010(19)</a></li>
+		
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/2010/07">July 2010(21)</a></li>
+		
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/2010/06">June 2010(0)</a></li>
+		
+		</ul>
+		<br>
+		<h3>快速链接</h3>
+	
+		<ul id="langpref">
+        
+<script>
+
+    function loginp()
+    {
+       $.getJSON("/do/info_login", function(ret){
+              if( ret.islogin)
+              {
+                  html='<li><a href="/web/20120517021435/http://tinydrblog.appspot.com/_ah/logout?continue=/web/20120517021435/https://www.google.com/accounts/Logout%3Fcontinue%3D/web/20120517021435/https://appengine.google.com/_ah/logout%253Fcontinue%253D/web/20120517021435/http://tinydrblog.appspot.com/%25253Fp%25253D89001%26service%3Dah">注销</a></li>';
+                if (ret.isadmin)
+                html+=' <li><a href="/admin">管理</a></li>';
+                $('#langpref').html(html);
+
+              }
+              else
+              {$('#langpref').html('<li><a href="/admin">登录</a></li>');}
+       });
+    }
+    loginp();
+</script>
+		</ul>
+	
+	<ul>
+        
+        
+		<li><a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/feed" title="使用 RSS 2.0 同步此内容">文章 <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+		<li><a rel="nofollow" href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/sitemap">sitemap</a></li>
+    	</ul>
+        </div>	
+    </div>
+	<!-- sidebar west END -->
+	<div class="fixed"></div>
+</div>
+
+<!-- sidebar south START -->
+<div id="southsidebar" class="sidebar">
+   	<div class="widget">
+		<h3>Tags</h3>
+		
+		<a title="3 pages" href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/tag/C%23%E4%B8%B2%E5%8F%A3%E9%80%9A%E4%BF%A1"><span style="font-size:12px;">C#串口通信</span></a>
+		
+		<a title="1 pages" href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/tag/C%2B%2B"><span style="font-size:10px;">C++</span></a>
+		
+	
+	</div>
+
+    <div id="linkcat-2" class="widget widget_links">
+    <h3>友情链接</h3>
+    	<ul class="xoxo blogroll">
+            
+    	</ul>
+    </div>
+</div>
+
+<!-- sidebar south END -->
+
+</div>
+<!-- sidebar END -->
+
+    
+	<div class="fixed"></div>
+</div>
+
+
+
+
+<!-- footer START -->
+<div id="footer">
+	<a id="gotop" href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/?p=89001#">置顶</a>
+	<a id="powered" href="http://web.archive.org/web/20120517021435/http://xuming.net/" target="_blank">Micolog</a>
+
+	<div id="copyright">
+		版权所有 © 2009 <a href="http://web.archive.org/web/20120517021435/http://tinydrblog.appspot.com/">TinyDrLog</a> | 由 <a href="http://web.archive.org/web/20120517021435/http://xuming.net/" target="_blank">Micolog</a> 和 <a href="http://web.archive.org/web/20120517021435/http://code.google.com/appengine/" target="_blank">Google App Engine</a>强力驱动. | <a href="http://web.archive.org/web/20120517021435/http://creativecommons.org/licenses/by-nc/2.5/cn/">许可协议</a>
+	</div>
+	<div id="themeinfo">
+		主题由 <a href="http://web.archive.org/web/20120517021435/http://www.neoease.com/" target="_blank">NeoEase</a> 和 <a href="http://web.archive.org/web/20120517021435/http://www.kgblog.net/" target="_blank">Keengle</a> 提供 | <a href="http://web.archive.org/web/20120517021435/http://www.google.cn/analytics/zh-CN/" target="_blank">Google Analytics</a></div>
+
+</div>
+<!-- footer END -->
+
+</div>
+<!-- container END -->
+</div>
+<!-- wrap END -->
+
+			
+
+
+
+
+
+0
+
+
+
+
+
+
+<!--
+     FILE ARCHIVED ON 2:14:35 май 17, 2012 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 6:09:02 июл 2, 2014.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->
+</body></html>
